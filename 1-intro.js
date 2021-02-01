@@ -71,21 +71,45 @@
     filter(users, user => user.age < 30),
     user => user.name
   );
-  console.log("ages_under_30", ages_under_30);
-  console.log("names_under_30", names_under_30);
+  // console.log("ages_under_30", ages_under_30);
+  // console.log("names_under_30", names_under_30);
 
+  // 함수를 생성하는 함수를 만든다.
   function bvalue(key) {
     return function(obj) {
       return obj[key];
     };
   }
-  console.log("bvalue", bvalue("a")({ a: 1, b: 2 }));
-  console.log("b value a", bvalue("a"));
-  console.log(
-    "ages with bvalue",
-    map(
-      filter(users, user => user.age < 30),
-      bvalue("age")
-    )
-  );
+  // console.log("bvalue", bvalue("a")({ a: 1, b: 2 }));
+  // console.log("b value a", bvalue("a"));
+  // console.log(
+  //   "ages with bvalue",
+  //   map(
+  //     filter(users, user => user.age < 30),
+  //     bvalue("age")
+  //   )
+  // );
+
+  // find 만들기
+  // console.log(filter(users, user => user.id === 3)[0]);
+  function findById(list, id) {
+    for (var i = 0, len = list.length; i < len; i++) {
+      if (list[i].id === id) return list[i];
+    }
+  }
+  function findByName(list, name) {
+    for (var i = 0, len = list.length; i < len; i++) {
+      if (list[i].name === name) return list[i];
+    }
+  }
+  // console.log(findById(users, 1));
+  // console.log(findByName(users, "SS"));
+  // 인자 이용해 중복을 제거
+  function findBy(key, list, val) {
+    for (var i = 0, len = list.length; i < len; i++) {
+      if (list[i][key] === val) return list[i];
+    }
+  }
+
+  console.log(findBy("name", users, "PQ"));
 }
