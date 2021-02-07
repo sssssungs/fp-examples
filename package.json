@@ -1,0 +1,22 @@
+{
+  "name": "fp-examples",
+  "version": "1.0.0",
+  "description": "함수형 자바스크립트 프로그래밍 노트",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sssssungs/fp-examples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sssssungs/fp-examples/issues"
+  },
+  "homepage": "https://github.com/sssssungs/fp-examples#readme",
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}
