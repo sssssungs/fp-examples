@@ -278,6 +278,24 @@
   console.log("==================================================");
 
   // 연산자를 함수로 변경해서 확장성을 높임.
+  // function not(v) {
+  //   return !v;
+  // }
+  // function beq(a) {
+  //   return function (b) {
+  //     return a === b;
+  //   };
+  // }
+  // _.some = function (list) {
+  //   return !!_.find(list, _.identity);
+  // };
+  // _.every = function (list) {
+  //   return beq(-1)(_.findIndex(list, not));
+  // };
+  // console.log("some example", _.some([1, 0, false]));
+  // console.log("every example", _.every([false, 1, true]));
+  // console.log("==================================================");
+
   function not(v) {
     return !v;
   }
@@ -286,11 +304,19 @@
       return a === b;
     };
   }
+  // 1-36 함수를 기능단위로 다시 쪼개기.
+  // console.log("_find", _.find([1, 2, 3], _.identity));
+  function positive(list) {
+    return _.find(list, _.identity);
+  }
+  function negativeIndex(list) {
+    return _.findIndex(list, not);
+  }
   _.some = function (list) {
-    return !!_.find(list, _.identity);
+    return not(not(positive(list)));
   };
   _.every = function (list) {
-    return beq(-1)(_.findIndex(list, not));
+    return beq(-1)(negativeIndex(list));
   };
   console.log("some example", _.some([1, 0, false]));
   console.log("every example", _.every([false, 1, true]));
