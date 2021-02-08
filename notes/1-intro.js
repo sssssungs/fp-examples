@@ -140,6 +140,7 @@
       if (predicate(list[i])) return list[i];
     }
   }
+  console.log("==================================================");
 
   console.log("users2", find(users2, (user) => user.getAge() === 33).getName());
   console.log(
@@ -152,6 +153,7 @@
     function (obj) {
       return obj[key] === val;
     };
+  console.log("==================================================");
 
   console.log("find with bmatch", find(users, bmatch1("id", 5)));
   console.log("filter with bmatch", filter(users, bmatch1("age", 28)));
@@ -179,12 +181,118 @@
       return match(obj, obj2);
     };
   }
+  console.log("==================================================");
 
   console.log(
     "match",
     match(find(users, bmatch("id", 3), find(users, bmatch("name", "IU"))))
   );
+  console.log("==================================================");
 
   // 최대한 true/false로 리턴하게 만들어서 if 조건을 태울수 있도록 한다.
   console.log("find same object", find(users, bmatch({ id: 3, name: "IU" })));
+
+  function findIndex(list, predicate) {
+    for (let i = 0, len = list.length; i < len; i++) {
+      if (predicate(list[i])) return i;
+    }
+    return -1;
+  }
+  console.log("==================================================");
+
+  console.log("find index example", findIndex(users, bmatch({ id: 3 })));
+  let _ = {
+    map: null,
+    filter: null,
+    find: null,
+    findIndex: null,
+    identity: null,
+    falsy: null,
+    truthy: null,
+    some: null,
+    every: null,
+  };
+  // 고차함수 정리 및 인자 늘리기
+  _.map = function (list, iteratee) {
+    let new_list = [];
+    for (let i = 0, len = list.length; i < len; i++) {
+      new_list.push(iteratee(list[i], i, list));
+    }
+    return new_list;
+  };
+  _.filter = function (list, predicate) {
+    let new_list = [];
+    for (let i = 0, len = list.length; i < len; i++) {
+      if (predicate(list[i], i, list)) new_list.push(list[i]);
+    }
+    return new_list;
+  };
+  _.find = function (list, predicate) {
+    for (let i = 0, len = list.length; i < len; i++) {
+      if (predicate(list[i], i, list)) return list[i];
+    }
+  };
+  _.findIndex = function (list, predicate) {
+    for (let i = 0, len = list.length; i < len; i++) {
+      if (predicate(list[i], i, list)) return i;
+    }
+    return -1;
+  };
+  console.log("==================================================");
+
+  // 고차함수 사용
+  console.log(
+    "고차함수 _.filter",
+    _.filter([1, 2, 3, 4], (value) => value > 3),
+    _.filter([1, 2, 3, 4], (value, index) => index % 2 === 0)
+  );
+
+  // 1.3.5 const identity = v => v; 이건 어디다 스는거징 ??
+  _.identity = function (v) {
+    return v;
+  };
+  console.log("==================================================");
+
+  console.log(
+    "identity test",
+    _.filter([true, 0, 10, "a", false, null], _.identity) // boolean 으로 평가했을때 true로 평가되는 값만 남았다.
+  );
+  _.falsy = function (value) {
+    return !value;
+  };
+  _.truthy = function (value) {
+    return !!value;
+  };
+
+  // some / every 만들기
+  // _.some = function (list) {
+  //   return !!_.find(list, _.identity);
+  // };
+  // _.every = function (list) {
+  //   return _.filter(list, _.identity).length === list.length;
+  // };
+  console.log("==================================================");
+
+  // console.log("some example", _.some([1, 0, false]));
+  // console.log("every example", _.every([{}, 1, true]));
+  console.log("==================================================");
+
+  // 연산자를 함수로 변경해서 확장성을 높임.
+  function not(v) {
+    return !v;
+  }
+  function beq(a) {
+    return function (b) {
+      return a === b;
+    };
+  }
+  _.some = function (list) {
+    return !!_.find(list, _.identity);
+  };
+  _.every = function (list) {
+    return beq(-1)(_.findIndex(list, not));
+  };
+  console.log("some example", _.some([1, 0, false]));
+  console.log("every example", _.every([false, 1, true]));
+  console.log("==================================================");
 }
