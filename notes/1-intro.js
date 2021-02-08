@@ -201,7 +201,7 @@
   console.log("==================================================");
 
   console.log("find index example", findIndex(users, bmatch({ id: 3 })));
-  let _ = {
+  const _ = {
     map: null,
     filter: null,
     find: null,
@@ -211,6 +211,7 @@
     truthy: null,
     some: null,
     every: null,
+    get: null,
   };
   // 고차함수 정리 및 인자 늘리기
   _.map = function (list, iteratee) {
@@ -321,4 +322,56 @@
   console.log("some example", _.some([1, 0, false]));
   console.log("every example", _.every([false, 1, true]));
   console.log("==================================================");
+  console.log("==================================================");
+  console.log("이제 클로저 연습");
+  // 1-49 함수를 리턴하는 함수
+  function constant(val) {
+    return function () {
+      return val;
+    };
+  }
+
+  const always10 = constant(10);
+  console.log(always10());
+  console.log(always10());
+  console.log(always10());
+
+  console.log("==================================================");
+
+  function callWith(val1) {
+    return function (val2, func) {
+      return func(val1, val2);
+    };
+  }
+
+  const callWith10 = callWith(10);
+  console.log(
+    "call with 10",
+    callWith10(20, (a, b) => a + b),
+    callWith10(20, (a, b) => a - b)
+  );
+  console.log(
+    "변수 없이 바로 사용",
+    callWith(10)(20, (a, b) => a + b)
+  );
+
+  console.log(
+    "map에 적용하기",
+    callWith([1, 2, 3])(function (v) {
+      return v * 10;
+    }, _.map)
+  );
+
+  console.log("==================================================");
+  _.get = function (list, idx) {
+    return list[idx];
+  };
+  // 코드 1-52
+  const callWithUsers = callWith([
+    { id: 2, name: "QQ", age: 33 },
+    { id: 4, name: "ZZ", age: 37 },
+    { id: 5, name: "AA", age: 36 },
+  ]);
+
+  console.log("call with users", callWithUsers(2, _.get));
 }
