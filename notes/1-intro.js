@@ -4,7 +4,7 @@
       return a + b;
     };
   }
-  let add3 = addMaker(3);
+  // let add3 = addMaker(3);
   // console.log(add3(5));
   // console.log(add3(10));
 
@@ -374,4 +374,40 @@
   ]);
 
   console.log("call with users", callWithUsers(2, _.get));
+  console.log("==================================================");
+
+  function add(a, b) {
+    return a + b;
+  }
+  const add10 = add.bind(null, 10);
+  console.log(add10(20));
+
+  console.log("==================================================");
+  // partial 만들기.
+  Function.prototype.partial = function () {
+    const fn = this,
+      _args = arguments; // 클로저가 기억할 변수에는 원본을 남기기
+    return function () {
+      const args = Array.prototype.slice.call(_args); // 리턴된 함수가 실행될때마다 복사하여 원본을 지키기
+      let arg = 0;
+      for (let i = 0; i < args.length && arg < arguments.length; i++) {
+        if (args[i] === undefined) args[i] = arguments[arg++];
+      }
+      return fn.apply(this, args);
+    };
+  };
+
+  function addTotal() {
+    let result = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      result += arguments[i];
+    }
+    return result;
+  }
+
+  console.log("==================================================");
+  console.log("partial 결과");
+  const add3 = addTotal.partial(undefined, undefined, 3, undefined, undefined);
+  console.log(add3(1, 2, 4, 5));
+  console.log(add3(20, 20, 20, 20));
 }
