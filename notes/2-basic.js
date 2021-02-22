@@ -96,3 +96,66 @@ console.log("===========================================");
 const az = function (a) {
   console.log(this, a);
 }.call([1], 1);
+
+/////////////////////////////// eval 과 new Function
+// 코드 2-28
+const a2222 = eval("10+5");
+const newFunction = new Function("a,b", "return a*b");
+function test222() {
+  return (a = 2);
+}
+const aaa = (bbb = 1);
+console.log(aaa, bbb);
+
+//// 유명함수
+// 코드 2-38 유명함수에서 자기 자신을 참조하는법
+var f1 = function () {
+  console.log("f1", f1);
+};
+
+f1();
+
+var f2 = function () {
+  console.log(arguments.callee);
+};
+f2();
+var f3 = f2;
+f2 = null;
+f3();
+console.log("======================================================");
+// 코드 2-40 유명함수의 자기 참조
+var ff1 = function f() {
+  console.log(f);
+};
+ff1();
+var ff2 = ff1;
+ff1 = null;
+ff2();
+
+// 2-41 안전하고 편한 자기 참조
+var hi = 1;
+var hello = function hi() {
+  console.log(hi);
+};
+hello();
+console.log(hello.name === "hi");
+// 내부 스코프에서만 사용하기 때문에 이름이 중복되어도 된다
+var z1 = function z() {
+  console.log(z, 1);
+};
+var z2 = function z() {
+  console.log(z, 2);
+};
+console.log(z1.name === z2.name);
+
+// 코드2-42 재귀를 이용한 flatten
+function flatten(arr) {
+  return (function f(arr, new_arr) {
+    arr.forEach(function (v) {
+      Array.isArray(v) ? f(v, new_arr) : new_arr.push(v);
+    });
+    return new_arr;
+  })(arr, []);
+}
+
+console.log("flatten", flatten([1, [[2]], [3]]));
