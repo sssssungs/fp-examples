@@ -225,3 +225,27 @@ console.log("arr1", arr1);
 arr1.push(3);
 console.log("arr1", arr1);
 console.log(rest([1, 2, 3]));
+console.log("======================================================");
+console.log("======================================================");
+console.log("======================================================");
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// 코드 2-63 if else 괄호 안에서 가능한것!
+{
+  let a;
+  if ((a = 5)) console.log("a", a);
+  if ((a = 0)) console.log("a", a);
+  else console.log("a else", a);
+  if ((a = 5 - 5));
+  else console.log("aaa", a);
+  /// 미리 선언된 변수에 값 할당하는것은 가능하다. 동시에 if 조건으로는 해당 변수가 사용된다.
+
+  let b, c, d;
+  b = c = 500;
+  console.log("bcd", b, c, d);
+}
+{
+  console.log("===============================");
+  console.log("boolean []", Boolean([]));
+  console.log("boolean {}", Boolean({}));
+}
