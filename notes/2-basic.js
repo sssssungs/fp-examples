@@ -159,3 +159,38 @@ function flatten(arr) {
 }
 
 console.log("flatten", flatten([1, [[2]], [3]]));
+console.log("======================================================");
+// 2.3 함수 실행과 인자 다시보기
+// 함수를 실행하는 방법에는 (), apply, call 이 있다.
+function test2(a, b, c) {
+  console.log("abc: ", a, b, c);
+  console.log("this: ", this);
+  console.log("arguments: ", arguments);
+}
+
+test2(10);
+test2(10, undefined);
+test2(10, 20, 30);
+console.log("======================================================");
+
+function test3(a, b) {
+  b = 10;
+  console.log("arguments", arguments);
+}
+test3(1);
+test3(1, 2);
+console.log("======================================================");
+
+function test4(a, b) {
+  arguments[1] = 10;
+  console.log("arg", b);
+}
+test4(1, 2);
+
+console.log("======================================================");
+// 코드 2-50 메소드로 만들기 (this)
+var o1 = { name: "obj1" };
+o1.test = test2;
+o1.test(11, 22, 33);
+// 자바스크립트에서는 객체에 함수를 붙인다음 그 함수를 . 으로 접근하여 실행하면 함수내부의 this가 . 왼쪽의 객체가 된다!!!
+
