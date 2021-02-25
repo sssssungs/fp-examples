@@ -192,5 +192,36 @@ console.log("======================================================");
 var o1 = { name: "obj1" };
 o1.test = test2;
 o1.test(11, 22, 33);
-// 자바스크립트에서는 객체에 함수를 붙인다음 그 함수를 . 으로 접근하여 실행하면 함수내부의 this가 . 왼쪽의 객체가 된다!!!
+// 자바스크립트에서는 객체에 함수를 붙인다음 그 함수를 . 으로 접근하여 실행하면 함수내부의 this가 . 왼쪽의 객체가 된다!!! ([]로 참조후 실행해도 동일)
 
+console.log("======================================================");
+test2.call(undefined, 1, 2, 3);
+test2.call(void 0, 1, 2, 3);
+test2.call(null, 1, 2, 3);
+// 모두 this는 window객체이다.
+test2.call(o1, 1, 2, 3); // this == o1 첫번째인자가 곧 this 값이다.
+
+console.log("======================================================");
+// apply는 인자들을 배열이나 배열과 비슷한 객체를 통해 전달한다.
+test2.apply(o1, { 0: 3, 1: 2, 2: 1, length: 3 }); // 가능
+(function () {
+  test2.apply(1000, arguments);
+})(1, 2, 3); // 이것도 가능
+(function () {
+  arguments.length--;
+  test2.apply(1000, arguments);
+})(1, 2, 3); // 이렇게 응용가능
+
+// 코드 2-60 네이티브 코드 활용
+var slice = Array.prototype.slice;
+function toArray(data) {
+  return slice.call(data);
+}
+function rest(data, n) {
+  return slice.call(data, n || 1);
+}
+var arr1 = toArray({ 0: 1, 1: 2, length: 2 });
+console.log("arr1", arr1);
+arr1.push(3);
+console.log("arr1", arr1);
+console.log(rest([1, 2, 3]));
