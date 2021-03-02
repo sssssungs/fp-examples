@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sssssungs/fp-examples#readme",
   "devDependencies": {
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "underscore": "^1.12.0"
   }
 }

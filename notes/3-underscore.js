@@ -1,3 +1,4 @@
+var _ = require("underscore");
 {
   // _.each, _.map에서 사용하는 객체는 4가지 정도. {}, [], arguments, arraylike
   var d1 = { name: "pj", age: 25 };
@@ -20,4 +21,30 @@
     );
   };
   // length 가지고만 판단을 하다니 약간 위험하군!
+  // underscore의 특징. 아래형태 (array like)도 에러를 뱉지 않음.
+  _.each({ length: 4 }, function () {
+    console.log("arguments", arguments);
+  });
+  _.each(0, function () {
+    console.log("arguments", arguments); // 아무일 없음
+  });
+
+  // underscore의 경우 꼭 필요하지 않은 경우라면 형체크를 거의 하지 않는다!. 그냥 출발시킴.
+  function func1(data) {
+    var keys = _.keys(data);
+    console.log("keys", keys);
+    for (var i = 0; i < keys.length; i++) {
+      //
+    }
+  }
+  func1(0);
+  function func2(data) {
+    console.log("getLength(data)", getLength(data));
+    for (var i = 0, len = getLength(data); i < len; i++) {}
+  }
+  function getLength(list) {
+    return list == null ? undefined : list.length;
+  }
+
+  func2(undefined);
 }
