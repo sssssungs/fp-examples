@@ -87,15 +87,15 @@ console.log(_.keys(null));
 
 // ㅋㅗ드 3-48 keys 이용해서 코드 개선하기.
 function bloop(new_data, body) {
-  return function (data, iteratee) {
+  return function (data, iter_predi) {
     var result = new_data(data);
     if (isArrayLike(data))
       for (var i = 0, len = data.length; i < len; i++) {
-        body(iteratee(data[i], i, data), result);
+        body(iter_predi(data[i], i, data), result, data[i]); // data[i] 추가함 for filter.
       }
     else
       for (var i = 0, keys = _.keys(data), len = keys.length; i < len; i++) {
-        body(iteratee(data[keys[i]], keys[i], data), result);
+        body(iter_predi(data[keys[i]], keys[i], data), result, data[keys[i]]);
       }
     // for (var key in data) {
     //   if (data.hasOwnProperty(key))
@@ -139,3 +139,39 @@ bloop(
 )([5, 6, 7], function (v) {
   console.log(v);
 });
+
+// filter를 만들어보자!!!
+// 3-49 old filter
+_.old_filter = function (data, predicate) {
+  var result = [];
+  for (var idx = 0, len = data.length; idx < len; idx++) {
+    if (predicate(data[idx], idx, data)) result.push(data[idx]);
+  }
+  return result;
+};
+
+// _.filter = function (data, predicate) {
+//   var result = [];
+//   _.each(data, function (val, idx, data) {
+//     if (predicate(val, idx, data)) result.push(val);
+//   });
+//   return result;
+// };
+
+_.filter = bloop(_.array, (bool, result, val) => {
+  if (bool) result.push(val);
+});
+
+var o = {
+  a: 1,
+  b: 2,
+  c: 3,
+  d: 4,
+};
+
+console.log(
+  "_.filte example",
+  _.filter(o, function (val) {
+    return val > 2;
+  })
+);
