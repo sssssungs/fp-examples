@@ -106,6 +106,37 @@ var _ = require("underscore");
   //   return data;
   // };
 
+  // function bloop(new_data, body) {
+  //   return function (data, iteratee) {
+  //     var result = new_data(data);
+  //     if (isArrayLike(data))
+  //       for (var i = 0, len = data.length; i < len; i++) {
+  //         body(iteratee(data[i], i, data), result);
+  //       }
+  //     else
+  //       for (var key in data) {
+  //         if (data.hasOwnProperty(key))
+  //           body(iteratee(data[key], key, data), result);
+  //       }
+  //
+  //     return result;
+  //   };
+  // }
+  _.isObject = function (obj) {
+    var type = typeof obj;
+    return type === "function" || (type === "object" && !!obj);
+  };
+
+  _.keys = function (obj) {
+    return _.isObject(obj) ? Object.keys(obj) : [];
+  };
+
+  console.log("==========================================");
+  console.log("_.keys example", _.keys({ name: "ph" }));
+  console.log(_.keys(10));
+  console.log(_.keys(null));
+
+  // ㅋㅗ드 3-48 keys 이용해서 코드 개선하기.
   function bloop(new_data, body) {
     return function (data, iteratee) {
       var result = new_data(data);
@@ -114,10 +145,13 @@ var _ = require("underscore");
           body(iteratee(data[i], i, data), result);
         }
       else
-        for (var key in data) {
-          if (data.hasOwnProperty(key))
-            body(iteratee(data[key], key, data), result);
+        for (var i = 0, keys = _.keys(data), len = keys.length; i < len; i++) {
+          body(iteratee(data[keys[i]], keys[i], data), result);
         }
+      // for (var key in data) {
+      //   if (data.hasOwnProperty(key))
+      //     body(iteratee(data[key], key, data), result);
+      // }
 
       return result;
     };
@@ -141,10 +175,10 @@ var _ = require("underscore");
 
   _.args0 = _.identity;
   _.args1 = (a, b) => b;
-  _.keys = (list) => _.map(list, _.args1);
+  // _.keys = (list) => _.map(list, _.args1);
 
-  console.log(_.keys([3, 2, 1]));
-  console.log(_.keys({ a: 1, b: 2, name: "eee" }));
+  // console.log(_.keys([3, 2, 1]));
+  // console.log(_.keys({ a: 1, b: 2, name: "eee" }));
 
   _.map([1, 2, 3, 4, 5], (v) => console.log(v + 2));
 
