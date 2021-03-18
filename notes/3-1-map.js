@@ -175,3 +175,32 @@ console.log(
     return val > 2;
   })
 );
+
+// 코드 3-54 작은함수들
+_.toArray = function (list) {
+  return Array.isArray(list) ? list : _.values(list);
+};
+
+_.rest = function (list, num) {
+  // 배열의 앞에서부터 num 만큼의 값들을 제거한 새로운 배열을 리턴한다.
+  return _.toArray(list).slice(num || 1);
+};
+
+_.reverse = function (list) {
+  return _.toArray(list).reverse();
+};
+console.log("========================");
+console.log("reverse", _.reverse([1, 2, 6, 8, 4]));
+console.log("reverse object", _.reverse({ 0: 1, 1: 2, 2: 3 }));
+
+_.rester = function (func, num) {
+  return function () {
+    return func.apply(null, _.rest(arguments, num));
+  };
+};
+function sum(a, b, c, d) {
+  return (a || 0) + (b || 0) + (c || 0) + (d || 0);
+}
+console.log("rester", _.rester(sum)(1, 2, 3, 4));
+console.log("rester", _.rester(sum, 2)(1, 2, 3, 4));
+console.log("rester", _.rester(sum, 3)(1, 2, 3, 4));
