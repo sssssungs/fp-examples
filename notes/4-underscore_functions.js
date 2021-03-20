@@ -162,8 +162,6 @@ _.filter = bloop(_.array, (bool, result, val) => {
   if (bool) result.push(val);
 });
 
-_.filter = bloop(_.array, _.if(_.idtt, _.rester(_.push)));
-
 var o = {
   a: 1,
   b: 2,
@@ -281,3 +279,31 @@ _.reject_2nd = bloop(_.array, _.if(_.negate(_.idtt), _.rester(_.push)));
 _.not = (v) => !v;
 
 _.reject_3rd = bloop(_.array, _.if(_.not, _.rester(_.push)));
+
+// 코드 3-65 bloop에 stopper 추가
+
+function bloop2(new_data, body, stopper) {
+  return function (data, iter_predi) {
+    var result = new_data(data);
+    var memo;
+    if (isArrayLike(data))
+      for (var i = 0, len = data.length; i < len; i++) {
+        memo = iter_predi(data[i], i, data);
+        if (!stopper) body(memo, result, data[i], i);
+        else if (stopper(memo)) return body(memo, result, data[i], i);
+      }
+    else
+      for (var i = 0, keys = _.keys(data), len = keys.length; i < len; i++) {
+        memo = iter_predi(data[keys[i]], keys[i], data);
+        if (!stopper) body(memo, result, data[i], i);
+        else if (stopper(memo))
+          return body(memo, result, data[keys[i]], keys[i]);
+      }
+    return result;
+  };
+}
+
+_.each = bloop2(_.identity, _.noop);
+_.find = bloop2(_.array, _.push_to);
+_.filter = bloop2(_.array, _.if(_.idtt, _.rester(_.push)));
+_.reject = bloop2(_.array, _.if(_.not, _.rester(_.push)));
