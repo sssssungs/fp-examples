@@ -162,6 +162,8 @@ _.filter = bloop(_.array, (bool, result, val) => {
   if (bool) result.push(val);
 });
 
+_.filter = bloop(_.array, _.if(_.idtt, _.rester(_.push)));
+
 var o = {
   a: 1,
   b: 2,
@@ -198,9 +200,84 @@ _.rester = function (func, num) {
     return func.apply(null, _.rest(arguments, num));
   };
 };
+
 function sum(a, b, c, d) {
   return (a || 0) + (b || 0) + (c || 0) + (d || 0);
 }
 console.log("rester", _.rester(sum)(1, 2, 3, 4));
 console.log("rester", _.rester(sum, 2)(1, 2, 3, 4));
 console.log("rester", _.rester(sum, 3)(1, 2, 3, 4));
+
+// 코드 3-57 if
+_.if = function (validator, func, alter) {
+  return function () {
+    return validator.apply(null, arguments)
+      ? func.apply(null, arguments)
+      : alter && alter.apply(null, arguments);
+  };
+};
+
+function sub(a, b) {
+  return a - b;
+}
+
+var sub2 = _.if(
+  function (a, b) {
+    return a >= b;
+  },
+  sub,
+  function () {
+    return new Error("a가 b보다 작습니다..");
+  }
+);
+// console.log(sub2(2, 5));
+console.log(sub2(10, 5));
+
+var diff = _.if(
+  function (a, b) {
+    return a >= b;
+  },
+  sub,
+  function (a, b) {
+    return sub(b, a);
+  }
+);
+
+console.log("diff", diff(1, 5), diff(5, 1));
+
+_.safety = _.with_validator = _.if;
+
+_.toArray2 = _.if(Array.isArray, _.idtt, _.values);
+
+console.log("_toArray2", _.toArray([1, 2, 3, 4, 5, 7, 8]));
+console.log("_toArray2", _.toArray({ a: 1, b: 2, c: 3, d: 4 }));
+
+_.constant = function (v) {
+  return function () {
+    return v;
+  };
+};
+
+_.isNumber = function (a) {
+  return toString.call(a) == "[object Number]";
+};
+
+var square = _.safety(_.isNumber, (a) => a * a, _.constant(0));
+
+console.log("square function with _.safety", square(5));
+console.log("square function with _.safety", square("가나다"));
+
+// 코드 3-63 reject 함수
+_.reject = bloop(_.array, _.if(_.idtt, _.noop, _.rester(_.push)));
+
+_.negate = function (func) {
+  return function () {
+    return !func.apply(null, arguments);
+  };
+};
+
+_.reject_2nd = bloop(_.array, _.if(_.negate(_.idtt), _.rester(_.push)));
+
+_.not = (v) => !v;
+
+_.reject_3rd = bloop(_.array, _.if(_.not, _.rester(_.push)));
