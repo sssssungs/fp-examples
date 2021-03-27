@@ -12,6 +12,7 @@ var isArrayLike = function (list) {
 
 function bloop(new_data, body, stopper) {
   return function (data, iter_predi) {
+    iter_predi = iter_predi || _.idtt;
     var result = new_data(data);
     var memo;
     if (isArrayLike(data))
@@ -110,4 +111,14 @@ console.log(
 console.log(
   "find key",
   _.findKey({ id: 4, name: "a", age: 22 }, (v) => typeof v === "string")
+);
+_.not = (v) => !v;
+_.some = bloop(_.constant(false), _.constant(true), _.idtt);
+_.every = bloop(_.constant(true), _.constant(false), _.not);
+
+console.log(
+  "some",
+  _.some([1, 2, 3, 0, 5], (v) => v === 0),
+  "every",
+  _.some([1, 2, 3, 4, 5], (v) => v > 0)
 );
