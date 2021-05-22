@@ -32,6 +32,37 @@
   };
 
   // 3-76 bloop 이용해서 _.reduce 만들기
+  // function bloop(new_data, body, stopper, is_reduce) {
+  //   // reduce 인지 인자 하나를 더 추가
+  //   return function (data, iter_predi, opt1) {
+  //     // reduce 인 경우 세번째 인자인 op1로 memo를 받음 (memo 초기값)
+  //     iter_predi = iter_predi || _.idtt;
+  //     var result = new_data(data);
+  //     var memo = is_reduce ? opt1 : undefined;
+  //
+  //     if (isArrayLike(data)) {
+  //       for (var i = 0, len = data.length; i < len; i++) {
+  //         memo = is_reduce // is_reduce 여부에 따라 전달 인자 개수 변경
+  //           ? iter_predi(memo, data[i], i, data)
+  //           : iter_predi(data[i], i, data);
+  //         if (!stopper) body(memo, result, data[i], i);
+  //         else if (stopper(memo)) return body(memo, result, data[i], i);
+  //       }
+  //     } else {
+  //       for (var i = 0, keys = _.keys(data), len = keys.length; i < len; i++) {
+  //         memo = is_reduce // is_reduce 여부에 따라 전달 인자 개수 변경
+  //           ? iter_predi(memo, data[keys[i]], keys[i], data)
+  //           : iter_predi(data[keys[i]], keys[i], data);
+  //         if (!stopper) body(memo, result, data[keys[i]], keys[i]);
+  //         else if (stopper(memo))
+  //           return body(memo, result, data[keys[i]], keys[i]);
+  //       }
+  //     }
+  //     return is_reduce ? memo : result;
+  //   };
+  // }
+
+  // 3-77 절차지향적으로 리팩토링 하기
   function bloop(new_data, body, stopper, is_reduce) {
     // reduce 인지 인자 하나를 더 추가
     return function (data, iter_predi, opt1) {
@@ -40,23 +71,14 @@
       var result = new_data(data);
       var memo = is_reduce ? opt1 : undefined;
 
-      if (isArrayLike(data)) {
-        for (var i = 0, len = data.length; i < len; i++) {
-          memo = is_reduce // is_reduce 여부에 따라 전달 인자 개수 변경
-            ? iter_predi(memo, data[i], i, data)
-            : iter_predi(data[i], i, data);
-          if (!stopper) body(memo, result, data[i], i);
-          else if (stopper(memo)) return body(memo, result, data[i], i);
-        }
-      } else {
-        for (var i = 0, keys = _.keys(data), len = keys.length; i < len; i++) {
-          memo = is_reduce // is_reduce 여부에 따라 전달 인자 개수 변경
-            ? iter_predi(memo, data[keys[i]], keys[i], data)
-            : iter_predi(data[keys[i]], keys[i], data);
-          if (!stopper) body(memo, result, data[keys[i]], keys[i]);
-          else if (stopper(memo))
-            return body(memo, result, data[keys[i]], keys[i]);
-        }
+      var keys = isArrayLike(data) ? null : _.keys(data); // key를 담고 아래 for문을 하나로 합친다.
+      for (var i = 0, len = (keys || data).length; i < len; i++) {
+        var key = keys ? keys[i] : i;
+        memo = is_reduce
+          ? iter_predi(memo, data[key], key, data)
+          : iter_predi(data[key], key, data);
+        if (!stopper) body(memo, result, data[key], key);
+        else if (stopper(memo)) return body(memo, result, data[key], key);
       }
       return is_reduce ? memo : result;
     };
