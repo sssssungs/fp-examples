@@ -121,5 +121,8 @@ console.log(
   _.some([1, 2, 3, 0, 5], (v) => v === 0),
   "every",
   _.some([1, 2, 3, 4, 5], (v) => v > 0),
-  _.every([function () {}, {}, []], _.isObject)
+  _.every([function () {}, {}, []], _.isObject),
+  _.every([function () {}, {}, []])
 );
+
+console.log("=====================================");
