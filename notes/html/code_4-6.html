@@ -3,12 +3,13 @@
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"></script>
 <script>
+    // method는 함수를 만드는 함수이다.
     var method = function (method) {
-        console.log('arguments',arguments)
-        var args = _.rest(arguments);
+        console.log('arguments', method, arguments)
+        var args = _.rest(arguments); // 1. 첫번째 인자를 제외
         console.log('after rest',args)
         return function (obj) {
-            return obj[method].apply(obj, args.concat(_.rest(arguments)));
+            return obj[method].apply(obj, args.concat(_.rest(arguments))); // 2. 새 인자를 더하기. push 사용했을 경ㅇ 인자가 기존 인자에 더해져 계속해서 늘어났을 것이다.
         };
     };
     var bg = method("css", "background-color");
@@ -23,5 +24,8 @@
     fillBlack($box);
     console.log(bg($box));
 
-
+    // method 를 이용해 animation도 구현가능. 함수를 만드는 함수!
+    var moveRight = method('animate', {left: '+=200'});
+    var moveDown = method('animate', {top: '+=200'});
+    moveDown(moveRight($box));
 </script>
