@@ -62,13 +62,13 @@ const falsy_values = _.compose(
 console.log("falsy_values", falsy_values([1, true, {}]));
 console.log("falsy_values", falsy_values([1, 0, false]));
 console.log("falsy_values", falsy_values([0, "", false]));
-
+console.log("=======================================");
 const some = _.negate(falsy_values);
 
 console.log("some", some([1, true, {}]));
 console.log("some", some([1, 0, false]));
 console.log("some", some([0, "", false]));
-
+console.log("=======================================");
 const every = _.compose(
   _.partial(_.isEqual, -1),
   _.partial(_.findIndex, _, _.negate(_.identity))
@@ -77,3 +77,4 @@ const every = _.compose(
 console.log("every", every([1, true, {}]));
 console.log("every", every([1, 0, false]));
 console.log("every", every([0, "", false]));
+console.log("=======================================");
