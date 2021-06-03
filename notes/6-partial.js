@@ -39,3 +39,41 @@ console.log("shift method", array);
 
 const barray = method([1, 2, 3], "concat", 4, 5);
 console.log("b array", barray);
+
+console.log("=======================================");
+// 4.2.2 partial compose로 함수만들기
+// compose는 오른쪽의 함수를 실행한 결과를 왼쪽의 함수에게 전달하는것을 반복
+// 코드 4-11
+_.compose(
+  console.log,
+  function (a) {
+    return a - 2;
+  },
+  function (a) {
+    return a + 5;
+  }
+)(1); // 1 + 5 >> 6 - 2 >> log
+
+const falsy_values = _.compose(
+  _.partial(_.isEqual, -1),
+  _.partial(_.findIndex, _, _.identity)
+);
+
+console.log("falsy_values", falsy_values([1, true, {}]));
+console.log("falsy_values", falsy_values([1, 0, false]));
+console.log("falsy_values", falsy_values([0, "", false]));
+
+const some = _.negate(falsy_values);
+
+console.log("some", some([1, true, {}]));
+console.log("some", some([1, 0, false]));
+console.log("some", some([0, "", false]));
+
+const every = _.compose(
+  _.partial(_.isEqual, -1),
+  _.partial(_.findIndex, _, _.negate(_.identity))
+);
+
+console.log("every", every([1, true, {}]));
+console.log("every", every([1, 0, false]));
+console.log("every", every([0, "", false]));
