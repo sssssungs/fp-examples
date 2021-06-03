@@ -78,3 +78,27 @@ console.log("every", every([1, true, {}]));
 console.log("every", every([1, 0, false]));
 console.log("every", every([0, "", false]));
 console.log("=======================================");
+
+// _.partial은 왼쪽에서부터 순서대로 하나하나 적용되므로, 그 개수가 정해져 있어야한다. 자바스크립트의 함수는 인자개수가 유동적일 수 있고
+// 함수의 마지막 인자를 중요하게 사용할수도 있는데 이같은 함수와 _.partial은 궁합이 잘 맞지 않는다.
+
+//코드 4-12
+// arrow function의 this는 window이므로, argument도 window에 따르는 형태를 가진다! 주의!!
+function add(a, b) {
+  return a + b;
+}
+function m() {
+  const iter = arguments[arguments.length - 1];
+  arguments.length--;
+  return _.reduce(arguments, iter);
+}
+
+console.log("m", m(100, 50, add));
+console.log("m", m(100, 50, 10, add));
+console.log("m", m(100, 50, 10, 5, add));
+
+const f1 = _.partial(m, _, _, _, add); // 꼭 3개만 넘길수 있다.
+console.log("f1", f1(1)); // NaN
+console.log("f1", f1(1, 2)); // NaN
+console.log("f1", f1(1, 2, 3)); // Good
+console.log("f1", f1(1, 2, 3, 4)); // iteratee is not function error 😡
