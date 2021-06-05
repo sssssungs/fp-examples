@@ -10,4 +10,11 @@
 7. 어느곳에서든 바로 실행하거나 혹은 미뤄서 실행할수 있도록 일반함수이자 순수함수로 선언하기
 8. 모델이나 컬렉션 등의 커스텀 보다는 기본 객체를 이용하기
 9. 로직의 흐름을 최대한 단방향으로 흐르게 하기
-10. 작은 함수를 모아 큰 함수만들기 
+10. 작은 함수를 모아 큰 함수만들기
+
+------
+
+### 참고
+[https://clojure.org](https://clojure.org)  
+[https://clojurescript.org](https://clojurescript.org)  
+[clojurescript github](https://github.com/clojure/clojurescript)

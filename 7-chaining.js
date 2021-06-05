@@ -26,3 +26,30 @@ var div_square = _.pipeline2(
 );
 
 console.log("div_sq", div_square(6));
+
+console.log("=============");
+
+//코드 4-17
+// for 이용해서 pipeline을 구현
+_.pipeline_for = function () {
+  var funs = arguments;
+  return function (seed) {
+    var l = seed;
+    for (var i = 0; i < funs.length; i++) {
+      var r = funs[i];
+      r = r(l);
+    }
+    return l;
+  };
+};
+// 마이클 포거스의 방법
+_.pipeline_michael = function () {
+  var funs = arguments;
+  return function (seed) {
+    return _.reduce(funs, (l, r) => r(l), seed);
+  };
+};
+// _partial 사용
+_.pipeline_partial = function () {
+  return _.partial(_.reduce, arguments, (l, r) => r(l));
+};
