@@ -150,6 +150,8 @@ _.partial2 = function (fn) {
 };
 
 // 새로운 partial method : _ 자리는 한칸씩 메꾸고 나머지가 ___ 자리로 들어가게 된다 -> undefined로 정의되지 않음 optional 임
+// 왼쪽의 _ 가 우선순위가 높고 그다음 오른쪽의 _ 이고 그다음이 ___ 자리임.
+
 var customPartial = _.partial2(console.log, ___, 2, 3);
 customPartial(1); // 1 2 3
 customPartial(1, 2, 3, 4, 5); // 1 2 3 4 5 2 3
@@ -162,5 +164,15 @@ console.log("=======================================");
 
 var customPartial3 = _.partial2(console.log, _, 2, ___, 5, _, 7);
 customPartial3(1);
+customPartial3(1, 3, 4);
+customPartial3(1, 3, 4, 6, 8);
 
 console.log("=======================================");
+
+// 코드 4-15 m과 _partial2 다시 사용
+var m_add_all = _.partial2(m, ___, add);
+
+console.log("add_all", m_add_all(1, 2, 3, 4, 5));
+console.log("add_all", m_add_all(1, 2, 3, 4, 50));
+
+// 함수형 자바스크립트의 꽃은 바로 partial 이 아닐까 !
