@@ -101,4 +101,66 @@ const f1 = _.partial(m, _, _, _, add); // 꼭 3개만 넘길수 있다.
 console.log("f1", f1(1)); // NaN
 console.log("f1", f1(1, 2)); // NaN
 console.log("f1", f1(1, 2, 3)); // Good
-console.log("f1", f1(1, 2, 3, 4)); // iteratee is not function error 😡
+// console.log("f1", f1(1, 2, 3, 4)); // iteratee is not function error 😡
+
+// 4-13 유동적 인자 전달이 가능한 partial
+let ___ = {};
+
+function _toUndef(args1, args2, args3) {
+  if (args2) args1 = args1.concat(args2);
+  if (args3) args1 = args1.concat(args3);
+  for (var i = 0, len = args1.length; i < len; i++)
+    if (args1[i] == _) args1[i] = undefined;
+  return args1;
+}
+
+function mergeArgs(args1, args2, args3) {
+  if (!args2.length)
+    return args3 ? _toUndef(args1, args3) : _toUndef(args1.slice());
+
+  var n_args1 = args1.slice(),
+    args2 = _.toArray(args2),
+    i = -1,
+    len = n_args1.length;
+  while (++i < len) if (n_args1[i] == _) n_args1[i] = args2.shift();
+  if (!args3) return _toUndef(n_args1, args2.length ? args2 : undefined);
+
+  var n_arg3 = args3.slice(),
+    i = n_arg3.length;
+  while (i--) if (n_arg3[i] == _) n_arg3[i] = args2.pop();
+  return args2.length
+    ? _toUndef(n_args1, args2, n_arg3)
+    : _toUndef(n_args1, n_arg3);
+}
+
+_.partial2 = function (fn) {
+  var args1 = [],
+    args3,
+    len = arguments.length,
+    ___idx = len;
+  for (var i = 1; i < len; i++) {
+    let arg = arguments[i];
+    if (arg == ___ && (___idx = i) && (args3 = [])) continue;
+    if (i < ___idx) args1.push(arg);
+    else args3.push(arg);
+  }
+  return function () {
+    return fn.apply(this, mergeArgs(args1, arguments, args3));
+  };
+};
+
+// 새로운 partial method : _ 자리는 한칸씩 메꾸고 나머지가 ___ 자리로 들어가게 된다 -> undefined로 정의되지 않음 optional 임
+var customPartial = _.partial2(console.log, ___, 2, 3);
+customPartial(1); // 1 2 3
+customPartial(1, 2, 3, 4, 5); // 1 2 3 4 5 2 3
+console.log("=======================================");
+
+var customPartial2 = _.partial2(console.log, _, 2, ___, 6);
+customPartial2(1, 3, 4, 5);
+customPartial2(1, 3, 4, 5, 7, 8, 9);
+console.log("=======================================");
+
+var customPartial3 = _.partial2(console.log, _, 2, ___, 5, _, 7);
+customPartial3(1);
+
+console.log("=======================================");
