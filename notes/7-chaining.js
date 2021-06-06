@@ -103,6 +103,7 @@ _.pipeline_mr = function () {
       funs,
       function (l, r) {
         // multiple result 라면 apply 로 인자를 펼친다.
+        // console.log("=======>", l && l._mr && r.apply(null, l));
         return l && l._mr ? r.apply(null, l) : r(l);
       },
       // 인자가 여러개라면 첫번째 함수에게도 mr 로 만들어서 넘기기.
@@ -134,3 +135,18 @@ var f1 = _.pipeline_mr(
 );
 
 console.log("f1", f1(3, 2));
+
+// _.pipeline으로 함수를 정의하게되면 multiple result를 지원하는 함수가 되어, 함수를 중첩하기만 해도 마치 Go언어처럼 동작한다.
+var add1 = _.pipeline_mr(function (a, b) {
+  return a + b;
+});
+var sub1 = _.pipeline_mr(function (a, b) {
+  return a - b;
+});
+function ff1(a, b) {
+  return _.mr(a - 5, b / 2);
+}
+
+// 넘겨지는 인자는 하나지만 2개처럼 동작한다.
+console.log(add1(ff1(20, 10)));
+console.log(sub1(ff1(20, 10)));
