@@ -18,6 +18,7 @@
   "homepage": "https://github.com/sssssungs/fp-examples#readme",
   "devDependencies": {
     "jquery": "^3.6.0",
+    "partial-js": "^1.1.8",
     "prettier": "2.2.1",
     "underscore": "^1.12.0"
   }
