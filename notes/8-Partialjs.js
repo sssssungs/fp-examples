@@ -51,3 +51,17 @@ var background = _.partial("css", "background");
 // background($('body'), 'green') // $('body').css('background', 'green') 과 동일하게 동작
 var concat = _.partial("concat"); // 첫번째 인자가 실행되는 method 명칭이다.
 console.log(concat([1, 2], 3));
+
+console.log("---------------------------------------");
+// currying : 하나씩 받는다.
+// 코드 4-29 부분 커링을 지원하지 않는 경우 함수로 감싸기
+var values = function (data) {
+  return _.map(data, function (v) {
+    return v;
+  });
+};
+console.log("values", values({ a: 1, b: 2, c: 4 }));
+// 코드 4-30 _.partial을 이용한 부분 적용
+var values2 = _.partial(_.map, _, function () {
+  return v;
+});
