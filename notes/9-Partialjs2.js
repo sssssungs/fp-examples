@@ -28,6 +28,7 @@ _.go(
 
 console.log(
   "-->",
+  _.mr(2, 4),
   _.go(
     10,
     (a) => _.mr(a * 10, 50),
@@ -35,3 +36,41 @@ console.log(
     (a) => a + 10
   )
 );
+
+// 코드 5-4 읽기 좋은 _.go
+function add(a, b) {
+  return a + b;
+}
+function square(a) {
+  return a * a;
+}
+
+console.log("_.go is easy to read", _.go(_.mr(2, 3), add, square));
+
+// 함수를 만드는 파이프라인 _.pipe
+// _.go가 즉시 실행하는 파이프라인 이라면, _.pipe는 실행할 준비가 된 함수를 리턴하는 파이프라인 함수다. 그외 모든 기능은 go와 동일하다.
+
+//코드 5-5 _.pipe
+var f1 = _.pipe(add, square, console.log);
+f1(2, 3);
+
+// 코드 5-6 부분커링지원. 파이프라인 함수를 함수를 리턴하는 함수와 함께 사용
+var products = [
+  { id: 1, name: "후드", discounted_price: 6000, price: 1000 },
+  { id: 2, name: "모자", discounted_price: 8000, price: 8000 },
+  { id: 3, name: "셔츠", discounted_price: 6000, price: 6000 },
+  { id: 4, name: "바지", discounted_price: 5000, price: 6000 },
+];
+
+_.go(
+  products,
+  _.filter(function (p) {
+    return p.discounted_price < p.price; // 할인상품만
+  }),
+  _.sortBy("discounted_price"), // 낮은순으로 정렬
+  _.first, // 첫번째 꺼내서
+  _.val("name"), // 이름을 확인한다.
+  console.log
+);
+
+// Partial.js의 filter sortby val은 모두 부분 커링이 된다. 모두 인자를 하나만 넘겨 앞으로 실행된 함수를 리턴 받았다!
