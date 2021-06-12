@@ -56,7 +56,7 @@ f1(2, 3);
 
 // 코드 5-6 부분커링지원. 파이프라인 함수를 함수를 리턴하는 함수와 함께 사용
 var products = [
-  { id: 1, name: "후드", discounted_price: 6000, price: 1000 },
+  { id: 1, name: "후드", discounted_price: 6000, price: 10000 },
   { id: 2, name: "모자", discounted_price: 8000, price: 8000 },
   { id: 3, name: "셔츠", discounted_price: 6000, price: 6000 },
   { id: 4, name: "바지", discounted_price: 5000, price: 6000 },
@@ -74,3 +74,51 @@ _.go(
 );
 
 // Partial.js의 filter sortby val은 모두 부분 커링이 된다. 모두 인자를 하나만 넘겨 앞으로 실행된 함수를 리턴 받았다!
+// 코드 5-7 일반적인 함수 작성방식
+var filtered_products = _.filter(products, function (p) {
+  return p.discounted_price < p.price;
+});
+var sorted_products = _.sortBy(filtered_products, "discounted_price");
+var first_product = _.first(sorted_products);
+_.val(first_product, "name");
+
+// 모든 함수를 중첩하는 방식
+_.val(
+  _.first(
+    _.sortBy(
+      _.filter(products, function (p) {
+        return p.discounted_price < p.price;
+      }),
+      "discounted_price"
+    )
+  ),
+  "name"
+);
+
+// 이렇게 작성하는 것 보다는 5-6 처럼 작성하는것이 훨씬 읽기도 쉽고, 변경도 용이하다.
+
+// 코드 5-9 파이프라인으로 보조함수 만들기
+
+_.go(
+  products,
+  _.filter((p) => p.discounted_price < p.price),
+  _.map(_.pipe(_.idtt, _.pick(["id", "name"]), _.values)),
+  console.log
+);
+
+// 다른방법으로 작성하기 코드 5-10 _.pipe == __ 이다.
+_.go(
+  products,
+  _.filter(function (p) {
+    return p.discounted_price < p.price;
+  }),
+  _.map(__(_.idtt, _.pick(["id", "name"]), _.values)),
+  console.log
+);
+
+_.go(
+  products,
+  _.filter((p) => p.discounted_price < p.price),
+  _.map((p) => _.go(p, _.pick(["id", "name"]), _.values)),
+  console.log
+);
