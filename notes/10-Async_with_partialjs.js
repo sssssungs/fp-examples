@@ -124,3 +124,28 @@ function test2(a) {
   else return "it is not 1 or 2";
 }
 console.log(test2(2)); // 결과는 1 이다. 왜냐면 is_1_async 에서 promise를 바로 return 하니까 true로 인식
+
+// 코드 5-24 논리적으로 맞도록 하려면 아래처럼 해야한다.
+function test3(a) {
+  return is_1_async(a).then(function (bool) {
+    if (bool) return "1이다";
+    else
+      return is_2_async(a).then(function (bool) {
+        if (bool) return "2이다";
+        else return "1도 아니고 2도 아니다";
+      });
+  });
+}
+test3(2).then(console.log);
+
+// 코드 5-25 _.if .else_if 사용해서 간결화
+var test4 = _.if(is_1_async, function () {
+  return "1입니다";
+})
+  .else_if(is_2_async, function () {
+    return "2입니다";
+  })
+  .else(function () {
+    return "1도 아니고 2도 아님";
+  });
+test4(2).then(console.log);
