@@ -25,6 +25,7 @@ function underscorejs2() {
 
 function partialjs() {
   return _.map(10, 5, [1, 2, 3], function (a, b, val) {
+    console.log("aa", a, b, val);
     return a * val - b;
   });
 } // map에 인자를 여러개 넘기면 iteratee 에게도 인자로 넘겨준다.
@@ -33,3 +34,19 @@ function partialjs() {
 console.log("underscorejs1", underscorejs1());
 console.log("underscorejs2", underscorejs2());
 console.log("partialjs", partialjs());
+
+// 코드 5-28 partial 특징사용하여 간단히 만들기
+var mapper2 = _.map(function (a, b, val) {
+  return a * b * val;
+});
+console.log("mapper2 with partial", mapper2(10, 100, [1, 2, 3]));
+
+function mult(a, b) {
+  return a * b;
+}
+
+var mult_all = _.map(function () {
+  // map의 iteratee argument: value, index, list
+  return _.reduce(_.initial(arguments, 2), mult); // initial : 뒤에서부터 n개 제거하고 나머지 반환한다.
+});
+console.log("mult_all", mult_all(10, 10, 2, [1, 2, 3]));
