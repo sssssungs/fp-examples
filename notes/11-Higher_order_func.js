@@ -50,3 +50,49 @@ var mult_all = _.map(function (a, b, val) {
   return _.reduce(_.initial(arguments, 2), mult); // initial : 뒤에서부터 n개 제거하고 나머지 반환한다.
 });
 console.log("mult_all", mult_all(10, 10, 2, [1, 2, 3]));
+
+var mult_all2 = _.map(__(_.args, _.initial(2), _.reduce(mult)));
+
+console.log("mult_all2", mult_all2(10, 10, 2, [1, 2, 3]));
+
+// ㅋㅗ드 5-29 spread 와 all
+_.all(10, 5, [
+  function (a, b) {
+    return a + b;
+  },
+  function (a, b) {
+    return a - b;
+  },
+  function (a, b) {
+    return a * b;
+  },
+]); // 결과: arguments { 0:15, 1: 5, 2:50, _mr: true }
+
+_.spread(10, 5, [
+  function (a) {
+    return a * a;
+  },
+  function (b) {
+    return b * b;
+  },
+]); // 결과: arguments { 0:100, 1: 25,  _mr: true }
+
+// all 은 동일하게 전달하고, spread 는 순서대로 전달한다.
+//코드 5-30 파이프라인과 함께 사용
+function con(a, b, c) {
+  console.log("value", a, b, c, arguments);
+}
+_.go(
+  10,
+  _.all(
+    (a) => a + 5,
+    (a) => a - 5,
+    (a) => a * 5
+  ),
+  _.spread(
+    (a) => a + 1,
+    (b) => b + 2,
+    (c) => c + 3
+  ),
+  con
+);
