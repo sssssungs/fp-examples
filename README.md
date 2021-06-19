@@ -18,3 +18,10 @@
 [https://clojure.org](https://clojure.org)  
 [https://clojurescript.org](https://clojurescript.org)  
 [clojurescript github](https://github.com/clojure/clojurescript)
+
+### Partial-js
+```
+_ == partial
+__ == pipe
+___ == indent
+```
