@@ -1,0 +1,23 @@
+<button type="button" id="save">save</button>
+<script>
+    const _ = require('partial-js');
+    var save_btn = document.getElementById('save');
+    // 일반 익명함수
+    save_btn.onmouseover = function() {
+        console.log(this);
+        console.log(arguments);
+    }
+
+    // _.pipeㅇㅕ서 button이 담긴 this를 내부 모든 함수에서 참조가능
+    save_btn.onmouseout = _.pipe(
+        function(){
+            console.log(this);
+            console.log(arguments)
+        },
+        function(){
+            console.log(this);
+            console.log(arguments)
+        }
+    )
+
+</script>
