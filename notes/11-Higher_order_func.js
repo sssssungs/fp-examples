@@ -94,5 +94,50 @@ _.go(
     (b) => b + 2,
     (c) => c + 3
   ),
-  con
+  console.log
 );
+
+console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+// ㅋㅗ드5-31 비동기로 가능하다!
+_.go(
+  10,
+  _.all(
+    //1
+    function (a) {
+      return new Promise(function (resolve) {
+        setTimeout(function () {
+          resolve(a + 5);
+        }, 2000);
+      });
+    },
+    //2
+    function (a) {
+      return a - 5;
+    },
+
+    //3
+    function (a) {
+      return a * 5;
+    }
+  ),
+  _.spread(
+    //1
+    function (a) {
+      return a + 1;
+    },
+    //2
+    _.callback(function (b, next) {
+      setTimeout(function () {
+        next(b + 2);
+      }, 2000);
+    }),
+    //3
+    function (c) {
+      return c + 3;
+    }
+  ),
+  console.log
+);
+
+// _.map 을 배열에 담긴 각각의 값을 하나의 함수를 통해 변경하기 위해 사용한다면, spread는 각각의 값을 각각의 함수를 통해 다른 결과로 만들때 사용하고
+// all은 동일한 값을 서로 다른 모든 함수들에게 전달하여 결과를 만들기 위해 사용한다.
