@@ -25,3 +25,11 @@ _ == partial
 __ == pipe
 ___ == indent
 ```
+
+### lazy evaluation
+[지연평가](https://plposer.tistory.com/46)  
+partial.js에서 네임스페이스를 _대신 L로 변하면 지연평가가 되며,  
+나머지 연산은 실행되지 않도록 알아서 최적화를 해준다.  
+이는 map, filter 등이 순수함수이기 때문에 가능하다.  
+평가 시점이나 평가 순서와 상관없이 동일한 결과를 가져올 수 있기 때문이다.
+[출처: https://plposer.tistory.com/46]
