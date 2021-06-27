@@ -70,3 +70,54 @@ _.difference2 = function (data, target) {
 };
 
 console.log(_.difference([1, 2, 3, 4, 5], [2, 3]));
+console.log("--------------------- 접기  --------------------");
+
+// 5-62 group by & reduce
+var users2 = [
+  { id: 1, name: "ID", age: 33 },
+  { id: 2, name: "AA", age: 33 },
+  { id: 3, name: "TW", age: 32 },
+  { id: 4, name: "Qw", age: 31 },
+];
+
+_.group_by = function (data, iter) {
+  return _.reduce(
+    data,
+    function (grouped, val, i, list) {
+      var key = iter(val, i, list);
+      _.has(grouped, key) ? grouped[key].push(val) : (grouped[key] = [val]);
+      return grouped;
+    },
+    {}
+  );
+};
+
+console.log(_.group_by(users2, (u) => u.age));
+// 접기는 루프를 끝까지 돈다.
+// reduce를 포함한 모든 접기 유형은 지연평가를 할수 없다.
+
+console.log("--------------------- 찾아내기  --------------------");
+// 코드 5-63 _.take
+console.log(_.take([1, 2, 3, 4]));
+console.log(_.take([1, 2, 3, 4], 2));
+console.log(_.take([1, 2, 3, 4], 10));
+
+// 코드 5-64 some
+_.some = function (data, iter) {
+  iter =
+    iter ||
+    function (v) {
+      return v;
+    };
+  var res = false;
+  _.find(data, function (v) {
+    return (res = !!iter(v));
+  });
+  return res;
+};
+
+console.log(
+  _.some([0, 1, 1, 2, 2], function (v) {
+    return v > 2;
+  })
+);
