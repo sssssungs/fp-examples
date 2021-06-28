@@ -42,3 +42,8 @@ partial.js에서 네임스페이스를 _대신 L로 변하면 지연평가가 �
 
 `map`, `filter`, `reduce`, `find` 는 대표함수들이다.  
 각 유형 중 추상화 레벨이 가장높다. 즉 각 유형별 특화함수를 만들수 있다는 뜻.
+
+😐 `Partial.js`의 지연평가 지원 함수는 다음과 같다.  
+- 수집하기 - `L.map`  
+- 거르기 - `L.filter`, `L.reject`
+- 찾아내기 - `L.find`, `L.some`, `L.every`, `L.take`, `L.loop`

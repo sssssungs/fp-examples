@@ -161,3 +161,36 @@ _.go(
 );
 console.log(count, count_reduce); // 결과는 동일하지만 reduce의 경우 length 만큼 반복한다.
 // 찾아내기 함수들은 값을 찾다가 원하는 결과를 완성하면 나간다.
+
+//5-76 지연평가의 동작조건을 동적으로 하기
+var strict_or_lazy1 = __(
+  _.range,
+  _.if(
+    (list) => list.length < 100,
+    __(
+      _.map((v) => v * v),
+      _.filter((v) => v % 2 !== 0),
+      _.take(10)
+    )
+  ).else(
+    __(
+      L.map((v) => v * v),
+      L.filter((v) => v % 2 !== 0),
+      L.take(10)
+    )
+  ),
+  console.log
+);
+
+strict_or_lazy1(50); // 엄격
+strict_or_lazy1(100); // 지연
+
+var strict_or_lazy2 = __(
+  _.range,
+  L.strict((list) => list.length < 100), // strict_or_lazy1 를 간단하게 만들면 이와 같다
+  // L.strict(100), 으로 변경할수 있다 (숫자만 넣으면 자동으로 length < 100)으로 변환해줌
+  L.map((v) => v * v),
+  L.filter((v) => v % 2 !== 0),
+  L.take(10),
+  console.log
+);
