@@ -121,3 +121,43 @@ console.log(
     return v > 2;
   })
 );
+
+var users3 = [
+  { id: 1, name: "ID", age: 33 },
+  { id: 2, name: "AA", age: 25 },
+  { id: 3, name: "TW", age: 12 },
+  { id: 4, name: "zz", age: 44 },
+  { id: 4, name: "qe", age: 14 },
+  { id: 5, name: "gr", age: 32 },
+  { id: 6, name: "hy", age: 31 },
+  { id: 7, name: "en", age: 90 },
+  { id: 8, name: "mo", age: 11 },
+  { id: 9, name: "as", age: 21 },
+];
+
+console.log("loop ------------------ 멈출수있는 reduce");
+var count = 0,
+  count_reduce = 0;
+_.go(
+  users3, // loop 사용
+  _.loop(function (list, user) {
+    count++;
+    // if (user.age < 20) list.push(user); // 10대 2명만 뽑기
+    // if (list.length === 2) return _.break(list);
+    // return list;
+    return user.age < 20 && list.push(user) === 2 ? _.break(list) : list;
+  }, []),
+  console.log
+);
+_.go(
+  users3, // reduce 사용
+  _.reduce(function (list, user) {
+    count_reduce++;
+    if (list.length === 2) return list;
+    if (user.age < 20) list.push(user); // 10대 2명만 뽑기
+    return list;
+  }, []),
+  console.log
+);
+console.log(count, count_reduce); // 결과는 동일하지만 reduce의 경우 length 만큼 반복한다.
+// 찾아내기 함수들은 값을 찾다가 원하는 결과를 완성하면 나간다.
