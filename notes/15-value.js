@@ -58,3 +58,53 @@ console.log("비교해보기", user2 == sortedUser2);
 console.log(_.pluck(sortedUser2, "age"));
 console.log(_.pluck(user2, "age"));
 // 결과는 다르지만 그 배열안에있는 모든 값은 새로운 값이 아닌 기존의 값으로 동일. 순서만 달라짐.
+console.log("===============================");
+
+// 6-5 reject 또한 새로운 배열을 리턴한다. 하지만 내부의 값은 그대로임.
+var rejectedUser2 = _.reject(user2, function (user) {
+  return user.age < 30;
+});
+console.log("rejectedUser2", rejectedUser2);
+console.log(rejectedUser2 == user2);
+console.log(rejectedUser2[0] == user2[0]);
+
+console.log("===============================");
+
+// 6-8 차이는 3명입니다. 함수조합버전
+function sub(a, b) {
+  return a - b;
+}
+var diff2 = _.pipe(
+  function (users, predi) {
+    return sub(users.length, _.reject(users, predi).length);
+  },
+  _.s$("차이는 {{$}}명 입니다."),
+  console.log
+);
+
+diff2(user2, function (user) {
+  return user.age < 30;
+});
+diff2(user2, function (user) {
+  return user.age > 30;
+});
+diff2(user2, function (user) {
+  return user.age == 25;
+});
+_.go(
+  user2,
+  _(diff2, _, function (user) {
+    // _ == _.partial
+    return user.age == 32;
+  })
+);
+_.go(
+  user2,
+  _.reject(function (user) {
+    return user.name == "AA";
+  }),
+  _(diff2, _, function (user) {
+    return user.age == 32;
+  })
+);
+// 재사용성이 높고, 다양한 조합이 가능하다 !!!!!

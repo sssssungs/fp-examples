@@ -19,7 +19,7 @@
 [https://clojurescript.org](https://clojurescript.org)  
 [clojurescript github](https://github.com/clojure/clojurescript)
 
-### Partial-js
+### [Partial-js](https://marpple.github.io/partial.js/docs/)
 ```
 _ == partial
 __ == pipe
