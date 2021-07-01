@@ -188,7 +188,7 @@ strict_or_lazy1(100); // 지연
 var strict_or_lazy2 = __(
   _.range,
   L.strict((list) => list.length < 100), // strict_or_lazy1 를 간단하게 만들면 이와 같다
-  // L.strict(100), 으로 변경할수 있다 (숫자만 넣으면 자동으로 length < 100)으로 변환해줌
+  // L.strict(100), 으로 변경할수 있다 (숫자만 넣으면 자동으로 length < 100)으로 변환해줌 test
   L.map((v) => v * v),
   L.filter((v) => v % 2 !== 0),
   L.take(10),
