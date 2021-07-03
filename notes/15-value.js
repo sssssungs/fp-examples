@@ -108,3 +108,39 @@ _.go(
   })
 );
 // 재사용성이 높고, 다양한 조합이 가능하다 !!!!!
+
+console.log("===============================");
+
+// 6-11 clone
+var product1 = {
+  name: "AB",
+  price: 1000,
+  sizes: ["s", "m", "l"],
+  colors: ["red", "blue"],
+};
+var product2 = _.clone(product1);
+console.log(product1 == product2);
+product2.name = "CD";
+console.log(product1.name, product2.name);
+// clone 으로 복사하면 영향을 끼치지 않는 독립적인 새로운 객체를 반환한다. 하지만 객체 내부의 모든 값들까지 복사하는것은 아니다.
+product2.sizes.push("xl");
+console.log(product2.sizes);
+console.log(product1.sizes); // product1 도 변경된다. 객체 내부의 객체는 복사하지 않는다.
+// clone은 동일한 key들을 가진 새로운 객체를 만들면서 각 키에 기존의 키에 해당하는 밸류를 할당한다. 때문에 내부의 값이 객체라면
+// 같은 객체를 바라보게 된다. (둘은 서로 다르지만 내부 객체의 경우 공유하게 되는)
+
+// 6-13 clone 구현
+_clone = function (obj) {
+  var cloned = _.isArray(obj) ? [] : {};
+  var keys = _.keys(obj);
+  _.each(keys, function (key) {
+    cloned[key] = obj[key];
+  });
+  return cloned;
+};
+
+// 6-15 extend , defaults 로 복사하기
+var product22 = _.extend({}, product1, { name: "VVVV" }); // extend의 경우 왼쪽 객체에 없는 값은 확장하고, 왼쪽 객체에 있는 값은 덮어쓴다.
+var product33 = _.defaults({ name: "QQQQQQ", price: 1 }, product1); // default의 경우 왼쪽에 없는 값만 확장한다.
+
+console.log(product22, product33, product1);
