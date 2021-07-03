@@ -97,3 +97,17 @@ _.set(user, "posts -> (#4) -> comments -> (#4) -> body", "update comment4"); // 
 console.log(user.posts[2].comments[0].body);
 // _.set 의 immutable 버전은 _.im.set 이 있다. 중첩구조를 파고 들면서 새로 만들어야하는 값만 새로 만들고,
 // 그대로 재활용해도 되는 데이터는 그대로 재활용한다.
+
+console.log("......................................................");
+
+_.set(users, "(#1) -> name", (name) => name.toLowerCase());
+console.log(_.sel(users, "(#1) -> name"));
+// set 의 마지막 인자로 function 을 전달하면 function 에 의해 값을 변경한다.
+
+// 6-35 깊은값 거내기는 _.deep_pluck 으로 ~
+// deep_pluck은 배열과 객체를 구분하면서 안으로 계속 파고들어 원하는 깊이의 결과들을 모든 새로운 객체를 리턴하는 함수다
+console.log("......................................................");
+
+console.log(_.deep_pluck(users, "posts.comments"));
+console.log(_.deep_pluck(users, "posts.comments.body"));
+console.log(_.deep_pluck(users, "posts.comments.id"));
