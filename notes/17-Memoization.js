@@ -55,3 +55,26 @@ console.log(f1(obj2));
 console.log(f1(obj2)); // 캐시
 // memoize2 는 각 함수들에 대한 결과값을 인자로 사용된 객체에 담아두므로 한번 사용하고
 // 버리는 객체라면 그 값은 별도의 관리 없이도 메모리에서 비워진다. 캐시를 별도로 관리안해도 알아서 해줌.
+
+var evens = _.memoize2(function (list) {
+  console.log("함수본체에 들어와서 루프 실행");
+  return _.filter(list, function (num) {
+    return num % 2 == 0;
+  });
+});
+
+// mutable 예제
+var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log(evens(list));
+console.log(evens(list)); // 캐시를 사용하여 loop를 돌지 않음
+list.push(11);
+list.push(12);
+console.log(evens(list)); // 캐시를 사용하여 12가 나오지 안음.
+
+// immutable 예제
+var list2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log(evens(list2));
+console.log(evens(list2)); // 캐시 사용
+list2 = list2.concat(11, 12);
+console.log(evens(list2));
+console.log(evens(list2)); // zotltkdyd
