@@ -17,3 +17,41 @@ console.log(mult5(1));
 console.log(mult5(2));
 console.log(mult5(1));
 console.log(mult5(2));
+
+var add = memoize(function (a, b) {
+  return a + b;
+});
+console.log(add(3, 5));
+console.log(add(3, 10)); // multiple arguments를 사용할수 없다.
+
+const _ = require("partial-js");
+
+// underscore의 memoize 내부
+_.memoize = function (func, hasher) {
+  var memoize = function (key) {
+    var cache = memoize.cache;
+    var address = "" + (hasher ? hasher.apply(this, arguments) : key);
+    // 캐시한 결과가 null, 0, undefined 일수 있기 때문에 has 사용
+    if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+    return cache[address];
+  };
+  memoize.cache = {}; // 메모리 관리 할수 있도록
+  return memoize;
+};
+
+// partial의 memoize2 (memoize는 underscorejs와 동일함)
+var f1 = _.memoize2(function (obj) {
+  console.log("함수본체에 들어옴");
+  return obj.a + 10;
+});
+
+var obj1 = { a: 1 };
+var obj2 = { a: 2 };
+
+console.log(f1(obj1));
+console.log(f1(obj1)); // 캐시
+console.log(f1(obj1)); // 캐시
+console.log(f1(obj2));
+console.log(f1(obj2)); // 캐시
+// memoize2 는 각 함수들에 대한 결과값을 인자로 사용된 객체에 담아두므로 한번 사용하고
+// 버리는 객체라면 그 값은 별도의 관리 없이도 메모리에서 비워진다. 캐시를 별도로 관리안해도 알아서 해줌.
