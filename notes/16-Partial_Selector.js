@@ -111,3 +111,22 @@ console.log("......................................................");
 console.log(_.deep_pluck(users, "posts.comments"));
 console.log(_.deep_pluck(users, "posts.comments.body"));
 console.log(_.deep_pluck(users, "posts.comments.id"));
+
+var delay = function (result) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(result);
+    }, 1000);
+  });
+};
+console.log("......................................................");
+
+function test3() {
+  var list = [1, 3, 5, 6, 7, 9];
+  return _.map(list, function (v, i) {
+    console.log(v, i); // 1초마다 찍고
+    return delay(v * 10);
+  });
+}
+
+test3().then((result) => console.log(result)); // 마지막에 곱하기 10 된 list를 찍음
